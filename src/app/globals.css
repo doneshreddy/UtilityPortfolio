@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/* next-themes toggles the `dark` / `light` class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Design tokens. Light theme is the default (:root); .dark overrides.
+  Matches the reference: near-black dark mode, clean light mode.
+*/
+:root {
+  --background: #ffffff;
+  --background-2: #f4f5f7;
+  --foreground: #0b0f19;
+  --muted: #5b6472;
+  --border: #e4e7ec;
+  --card: #ffffff;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+}
+
+.dark {
+  --background: #08090c; /* near-black */
+  --background-2: #0e1015;
+  --foreground: #ededf0;
+  --muted: #8b93a1;
+  --border: #1c2027;
+  --card: #0f1115;
+  --accent: #ffffff; /* reference uses white primary buttons in dark */
+  --accent-strong: #e5e5e5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-2: var(--background-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* Smoothly ease the background/text when switching light/dark. */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ease common surfaces (cards, borders) on theme change too. */
+.border-border,
+[class*="bg-card"],
+[class*="bg-background-2"] {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.container-page {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ---------- Entrance animations (fast + smooth, no delay) ---------- */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Utility classes. Duration is quick; easing is ease-out for a snappy feel. */
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out both;
+}
+.animate-fade-up {
+  animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-scale-in {
+  animation: scale-in 0.25s ease-out both;
+}
+
+/*
+  Stagger helper: set `style={{ '--i': index }}` on an item and give it
+  .stagger to delay each one slightly (60ms steps). Keeps it swift.
+*/
+.stagger {
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* Respect users who prefer reduced motion: disable all the above. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-up,
+  .animate-scale-in {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Subtle top-radial page glow used behind hero/section titles */
+.page-glow {
+  position: relative;
+}
+.page-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    60rem 30rem at 50% -10%,
+    color-mix(in oklab, var(--foreground) 6%, transparent),
+    transparent 70%
+  );
+  pointer-events: none;
+}
