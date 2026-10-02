@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site } from "@/lib/site";
 
 export default function Footer() {
@@ -10,13 +11,15 @@ export default function Footer() {
           © {year} {site.name}
         </span>
         <span aria-hidden>·</span>
-        <a href="/privacy" className="transition-colors hover:text-foreground">
+        {/* Use next/link (not <a>) so the basePath is applied on GitHub Pages. */}
+        <Link href="/privacy" className="transition-colors hover:text-foreground">
           Privacy
-        </a>
+        </Link>
         <span aria-hidden>·</span>
-        <a href="/status" className="transition-colors hover:text-foreground">
+        {/* TODO: src/app/status/page.tsx doesn't exist yet — this 404s. */}
+        <Link href="/status" className="transition-colors hover:text-foreground">
           Status
-        </a>
+        </Link>
       </div>
     </footer>
   );

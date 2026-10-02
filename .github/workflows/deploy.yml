@@ -3,15 +3,16 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Lets you re-deploy by hand from the Actions tab.
   workflow_dispatch:
 
-# Allow the workflow to publish to GitHub Pages
+# Allow the workflow to publish to GitHub Pages.
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Only one concurrent deployment
+# Only one concurrent deployment; newer runs cancel in-flight ones.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -21,32 +22,61 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
+      # GitHub Pages serves a *project* repo from a subpath:
+      #     https://<user>.github.io/<repo>/
+      # so Next.js has to bake that prefix into every asset URL at build time
+      # (next.config.ts reads NEXT_PUBLIC_BASE_PATH).
+      # A repo literally named "<user>.github.io" is served from the root,
+      # so its base path must stay empty.
+      - name: Compute base path
+        id: base_path
+        run: |
+          repo="${GITHUB_REPOSITORY#*/}"
+          owner="${GITHUB_REPOSITORY%%/*}"
+          if [ "$repo" = "$owner.github.io" ]; then
+            base_path=""
+          else
+            base_path="/$repo"
+          fi
+          echo "value=$base_path" >> "$GITHUB_OUTPUT"
+          echo "::notice::Building ${owner}/${repo} with base path '${base_path:-/}'"
+
       - name: Build static site
-        # Repo is served at https://<user>.github.io/UtilityPortfolio/
-        # so the base path must match the repository name.
         env:
-          NEXT_PUBLIC_BASE_PATH: /UtilityPortfolio
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.base_path.outputs.value }}
         run: npm run build
 
-      - name: Add .nojekyll
-        # Stops GitHub Pages from ignoring the _next/ folder.
-        run: touch out/.nojekyll
+      - name: Verify export
+        run: |
+          if [ ! -f out/index.html ]; then
+            echo "::error::Build did not produce out/index.html"
+            exit 1
+          fi
+          if [ ! -f out/.nojekyll ]; then
+            echo "::error::out/.nojekyll is missing (public/.nojekyll should copy it here)"
+            exit 1
+          fi
+          echo "::notice::Exported $(find out -type f | wc -l) files"
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: out
+          # upload-pages-artifact v4+ skips dotfiles by default, which would
+          # silently drop .nojekyll. GitHub Pages needs it so it stops hiding
+          # the _next/ folder.
+          include-hidden-files: true
 
   deploy:
     needs: build
@@ -57,4 +87,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

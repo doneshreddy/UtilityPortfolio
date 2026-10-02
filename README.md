@@ -50,20 +50,57 @@ npm run dev      # http://localhost:3000
 npm run build    # outputs a static site to ./out
 ```
 
-## Deployment
+## Deployment (GitHub Pages)
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the
-static site and publishes it to GitHub Pages at:
+static site and publishes the `out/` folder to GitHub Pages.
 
+### One-time setup (required)
+
+The very first deploy failed with
+`Ensure GitHub Pages has been enabled`, because the Pages site didn't exist
+yet. Enable it once:
+
+1. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
+2. The repo must be **public**. GitHub Pages on a **private** repo requires a
+   paid plan (Pro / Team / Enterprise) — on the free plan the API returns
+   *"Your current plan does not support GitHub Pages for this repository."*
+
+Or do step 1 from the CLI:
+
+```bash
+gh api -X POST repos/doneshreddy/UtilityPortfolio/pages -f build_type=workflow
 ```
-https://<your-username>.github.io/UtilityPortfolio/
+
+Once enabled the site lives at
+`https://doneshreddy.github.io/UtilityPortfolio/`.
+
+### How the base path is handled
+
+A *project* repo is served from a subpath (`/<repo>/`), so the workflow derives
+`NEXT_PUBLIC_BASE_PATH=/<repo>` from the repository name and passes it to
+`next.config.ts` during the build. That means **renaming the repo needs no code
+changes**. A repo named `<user>.github.io` is served from the root, so the
+workflow leaves the base path empty for those.
+
+`.nojekyll` is committed as `public/.nojekyll`, so Next.js copies it into
+`out/.nojekyll` (without it, Pages hides the `_next/` folder and every asset
+404s). The upload step also passes `include-hidden-files: true`, because
+`upload-pages-artifact@v4+` skips dotfiles by default.
+
+### Custom domain
+
+Buy the domain, add it under **Settings → Pages → Custom domain**, then make
+the build serve from the root by setting `base_path=""` in the
+`Compute base path` step of the workflow (a custom domain serves from `/`, not
+from `/<repo>/`).
+
+### Previewing the export locally
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/UtilityPortfolio npm run build
+npx serve out          # http://localhost:3000/UtilityPortfolio/
 ```
-
-Enable it once in **GitHub → Settings → Pages → Build and deployment →
-Source: GitHub Actions**.
-
-When you later buy a custom domain and serve from the root, remove the
-`NEXT_PUBLIC_BASE_PATH` env var in the workflow.
 
 ## Personalizing
 

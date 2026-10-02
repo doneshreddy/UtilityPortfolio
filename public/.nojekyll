@@ -1,0 +1,4 @@
+# Tells GitHub Pages to serve this site as-is instead of running Jekyll.
+# Without it, Pages strips the underscore in Next.js's /_next/ folder and
+# every CSS/JS asset 404s. Next.js copies files in public/ into the export
+# root, so this lands in out/.nojekyll on every build.
