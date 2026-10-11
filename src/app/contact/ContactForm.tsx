@@ -18,6 +18,12 @@ export default function ContactForm() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        const name = String(data.get("name") ?? "");
+        const email = String(data.get("email") ?? "");
+        const subject = String(data.get("subject") ?? "Project inquiry");
+        const body = `${message}\n\nFrom: ${name}\nReply to: ${email}`;
+        window.location.href = `mailto:contact@lambdabees.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         setSent(true);
       }}
       className="rounded-2xl border border-border bg-card p-6"
@@ -76,7 +82,7 @@ export default function ContactForm() {
       {sent && (
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-500">
           <span>✓</span>
-          <span>Success! Your message is ready (connect a form backend to send it).</span>
+          <span>Your email app is opening with this message ready to send.</span>
         </div>
       )}
 

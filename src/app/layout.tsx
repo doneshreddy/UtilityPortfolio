@@ -4,8 +4,7 @@ import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ChatWidget from "@/components/ChatWidget";
-import { site } from "@/lib/site";
+import { company } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,8 +17,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${site.name} | ${site.role}`,
-  description: site.intro,
+  metadataBase: new URL("https://lambdabees.com"),
+  title: {
+    default: "Lambdabees | Intelligent Software Engineering",
+    template: "%s | Lambdabees",
+  },
+  description: company.description,
+  keywords: [
+    "AI development",
+    "custom software engineering",
+    "web application development",
+    "mobile app development",
+    "workflow automation",
+    "agentic AI",
+  ],
+  icons: { icon: "/lambdabees-emblem.png" },
+  openGraph: {
+    title: "Lambdabees | Intelligent Software Engineering",
+    description: company.description,
+    url: "https://lambdabees.com",
+    siteName: "Lambdabees",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -34,7 +53,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
-          <ChatWidget />
         </ThemeProvider>
       </body>
     </html>

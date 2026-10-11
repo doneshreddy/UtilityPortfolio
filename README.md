@@ -1,10 +1,11 @@
-# UtilityPortfolio
+# Lambdabees Website
 
-My personal portfolio and a growing set of handy utilities, built with
-**Next.js + TypeScript + Tailwind CSS**.
+The company website for **Lambdabees**, an independent software and AI product
+studio. The founder portfolio remains available at `/portfolio` with its
+projects, apps, and writing linked from there.
 
-The site is static for now and deploys to GitHub Pages. It's structured so I
-can add backend features (budget tracker, notes) later without a rewrite.
+The site is built with **Next.js + TypeScript + Tailwind CSS**, exported as a
+fully static site, and hosted on GitHub Pages at `https://lambdabees.com`.
 
 ## Tech stack
 
@@ -18,24 +19,20 @@ can add backend features (budget tracker, notes) later without a rewrite.
 ```
 src/
   app/                 # pages (App Router). Each folder = a route.
-    page.tsx           #   /            → Home
+    page.tsx           #   /            → Lambdabees landing page
+    portfolio/page.tsx #   /portfolio   → founder portfolio
     projects/page.tsx  #   /projects
-    budget/page.tsx    #   /budget      (placeholder)
-    notes/page.tsx     #   /notes       (placeholder)
+    apps/              #   /apps
+    blogs/             #   /blogs
     contact/page.tsx   #   /contact
+    privacy/page.tsx   #   /privacy
+    terms/page.tsx     #   /terms
     layout.tsx         #   shared shell (Navbar + Footer)
     globals.css        #   design tokens + Tailwind
-  components/          # reusable UI: Navbar, Footer, Card, Section
-  data/content.ts      # projects + feature cards (edit your content here)
-  lib/site.ts          # your name, role, links, nav (edit your details here)
+  components/          # reusable UI and Lambdabees brand mark
+  data/                # portfolio projects, apps, experience, and writing
+  lib/site.ts          # company and founder contact details
 ```
-
-### Adding a new page
-
-1. Create `src/app/<name>/page.tsx`.
-2. Add a link in `navLinks` inside `src/lib/site.ts`.
-
-That's it — it shows up in the navbar and footer automatically.
 
 ## Local development
 

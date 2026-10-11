@@ -1,25 +1,22 @@
 import Link from "next/link";
-import { site } from "@/lib/site";
+import BrandMark from "./BrandMark";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
-    <footer className="border-t border-border/60">
-      <div className="container-page flex items-center justify-center gap-2 py-6 text-xs text-muted">
-        <span>
-          © {year} {site.name}
-        </span>
-        <span aria-hidden>·</span>
-        {/* Use next/link (not <a>) so the basePath is applied on GitHub Pages. */}
-        <Link href="/privacy" className="transition-colors hover:text-foreground">
-          Privacy
-        </Link>
-        <span aria-hidden>·</span>
-        {/* TODO: src/app/status/page.tsx doesn't exist yet — this 404s. */}
-        <Link href="/status" className="transition-colors hover:text-foreground">
-          Status
-        </Link>
+    <footer className="border-t border-border bg-background">
+      <div className="container-page flex flex-col gap-5 py-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <BrandMark className="h-8 w-8" />
+          <div>
+            <p className="text-sm font-semibold">Lambdabees</p>
+            <p className="text-xs text-muted">© 2026 Lambdabees. All rights reserved.</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+          <Link href="/privacy" className="transition-colors hover:text-foreground">Privacy</Link>
+          <Link href="/terms" className="transition-colors hover:text-foreground">Terms</Link>
+          <Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link>
+        </nav>
       </div>
     </footer>
   );

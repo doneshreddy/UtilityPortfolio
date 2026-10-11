@@ -6,7 +6,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Have a project in mind or want to work together?",
+  description: "Contact Lambdabees about a software, mobile, automation, or AI project.",
 };
 
 export default function ContactPage() {
@@ -14,7 +14,7 @@ export default function ContactPage() {
     <div className="container-page pb-20">
       <PageTitle
         title="Get in Touch"
-        subtitle="Have a project in mind or want to work together? I'd love to hear from you."
+        subtitle="Have a product, workflow, or software project in mind? Tell us what you are building."
       />
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
@@ -25,7 +25,7 @@ export default function ContactPage() {
         <Reveal index={1} className="space-y-6">
           {/* Other ways to connect */}
           <div className="rounded-2xl border border-border bg-card p-6">
-            <h3 className="font-semibold">Other Ways to Connect</h3>
+            <h3 className="font-semibold">Direct Contact</h3>
             <ul className="mt-4 space-y-4 text-sm">
               <li>
                 <p className="text-xs text-muted">Email</p>
@@ -47,17 +47,6 @@ export default function ContactPage() {
                   {site.githubUser}
                 </a>
               </li>
-              <li>
-                <p className="text-xs text-muted">LinkedIn</p>
-                <a
-                  href={site.socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground"
-                >
-                  {site.linkedinUser}
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -69,10 +58,10 @@ export default function ContactPage() {
                 <span className="mt-0.5 text-green-500">●</span>
                 <span>
                   <span className="block font-medium">
-                    Available for freelance
+                    Available for new projects
                   </span>
                   <span className="text-xs text-muted">
-                    Open to new projects
+                    Select engagements and product collaborations
                   </span>
                 </span>
               </li>
