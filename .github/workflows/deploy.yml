@@ -33,28 +33,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # GitHub Pages serves a *project* repo from a subpath:
-      #     https://<user>.github.io/<repo>/
-      # so Next.js has to bake that prefix into every asset URL at build time
-      # (next.config.ts reads NEXT_PUBLIC_BASE_PATH).
-      # A repo literally named "<user>.github.io" is served from the root,
-      # so its base path must stay empty.
-      - name: Compute base path
-        id: base_path
-        run: |
-          repo="${GITHUB_REPOSITORY#*/}"
-          owner="${GITHUB_REPOSITORY%%/*}"
-          if [ "$repo" = "$owner.github.io" ]; then
-            base_path=""
-          else
-            base_path="/$repo"
-          fi
-          echo "value=$base_path" >> "$GITHUB_OUTPUT"
-          echo "::notice::Building ${owner}/${repo} with base path '${base_path:-/}'"
+      # Read the actual Pages URL: project sites use /<repo>, while a
+      # custom domain (such as lambdabees.com) serves from the root.
+      - name: Read GitHub Pages configuration
+        id: pages
+        uses: actions/configure-pages@v6
 
       - name: Build static site
         env:
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.base_path.outputs.value }}
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
         run: npm run build
 
       - name: Verify export

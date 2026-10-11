@@ -77,11 +77,10 @@ Once enabled the site lives at
 
 ### How the base path is handled
 
-A *project* repo is served from a subpath (`/<repo>/`), so the workflow derives
-`NEXT_PUBLIC_BASE_PATH=/<repo>` from the repository name and passes it to
-`next.config.ts` during the build. That means **renaming the repo needs no code
-changes**. A repo named `<user>.github.io` is served from the root, so the
-workflow leaves the base path empty for those.
+The workflow uses `actions/configure-pages` to read the site's actual base
+path from GitHub Pages and passes it to `next.config.ts` through
+`NEXT_PUBLIC_BASE_PATH`. Project sites use `/<repo>`; user sites and custom
+domains use an empty base path. Changing the domain needs no workflow edits.
 
 `.nojekyll` is committed as `public/.nojekyll`, so Next.js copies it into
 `out/.nojekyll` (without it, Pages hides the `_next/` folder and every asset
@@ -90,10 +89,45 @@ workflow leaves the base path empty for those.
 
 ### Custom domain
 
-Buy the domain, add it under **Settings → Pages → Custom domain**, then make
-the build serve from the root by setting `base_path=""` in the
-`Compute base path` step of the workflow (a custom domain serves from `/`, not
-from `/<repo>/`).
+The intended custom domain is **lambdabees.com**, registered at Porkbun.
+Hosting stays on GitHub Pages; no paid Porkbun hosting is needed.
+
+1. Recommended: in your **GitHub account Settings → Pages**, add
+   `lambdabees.com` as a verified domain. Add the TXT record GitHub supplies
+   in Porkbun and finish verification. Keep that TXT record.
+2. In this **repository's Settings → Pages → Custom domain**, save
+   `lambdabees.com` before pointing its DNS at GitHub.
+3. In **Porkbun → Domain Management → lambdabees.com → DNS**, use
+   **Quick DNS Config → Github**. Set the subdomain host to `www` and its
+   answer to `doneshreddy.github.io` (no protocol or repository path).
+   Review existing records before replacing parking records; preserve
+   email records and unrelated TXT records.
+4. If configuring manually, use these records (an empty Porkbun Host field
+   means the root domain):
+
+   | Type | Host | Answer |
+   | --- | --- | --- |
+   | A | empty | 185.199.108.153 |
+   | A | empty | 185.199.109.153 |
+   | A | empty | 185.199.110.153 |
+   | A | empty | 185.199.111.153 |
+   | CNAME | www | doneshreddy.github.io |
+
+   Replace conflicting root/www parking or forwarding records. Any root
+   AAAA records must also point to GitHub Pages, or be removed if not needed.
+5. Run **Actions → Deploy to GitHub Pages → Run workflow** after changing
+   the domain, so the export uses the new root base path.
+6. Once GitHub's DNS check passes and the certificate is ready, enable
+   **Enforce HTTPS**. DNS propagation and certificate provisioning can each
+   take up to 24 hours. GitHub redirects `www.lambdabees.com` to
+   `lambdabees.com` when both DNS entries are configured.
+
+This project deploys through GitHub Actions, so a `CNAME` file in the source
+is not required; the repository's Pages setting controls the custom domain.
+
+Official guides:
+[GitHub domain setup](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+and [Porkbun's GitHub quick config](https://kb.porkbun.com/article/64-how-to-connect-your-domain-to-github-pages).
 
 ### Previewing the export locally
 
