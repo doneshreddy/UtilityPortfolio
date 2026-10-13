@@ -17,7 +17,7 @@ export const site = {
     //linkedin: "https://www.linkedin.com/doneshreddy/",
     email: "mailto:contact@lambdabees.com",
   },
-  //githubUser: "doneshreddy",
+  githubUser: "doneshreddy",
   //linkedinUser: "doneshreddy",
 };
 
