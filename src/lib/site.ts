@@ -13,12 +13,12 @@ export const site = {
     "I build reliable software and enjoy turning complex ideas into clean, well-crafted solutions that just work.",
   email: "contact@lambdabees.com",
   socials: {
-    github: "https://github.com/doneshreddy",
-    linkedin: "https://www.linkedin.com/doneshreddy/",
+    github: "https://github.com/lambdabees",
+    linkedin: "https://www.linkedin.com/lambdabees/",
     email: "mailto:contact@lambdabees.com",
   },
-  githubUser: "doneshreddy",
-  linkedinUser: "doneshreddy",
+  githubUser: "lambdabees",
+  linkedinUser: "lambdabees",
 };
 
 export const company = {
