@@ -14,11 +14,11 @@ export const site = {
   email: "contact@lambdabees.com",
   socials: {
     github: "https://github.com/doneshreddy",
-    //linkedin: "https://www.linkedin.com/doneshreddy/",
+    linkedin: "https://www.linkedin.com/doneshreddy/",
     email: "mailto:contact@lambdabees.com",
   },
   githubUser: "doneshreddy",
-  //linkedinUser: "doneshreddy",
+  linkedinUser: "doneshreddy",
 };
 
 export const company = {
