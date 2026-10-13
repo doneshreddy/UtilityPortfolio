@@ -4,7 +4,7 @@
  */
 
 export const site = {
-  name: "Donesh R K",
+  name: "D R K",
   initials: "DRK",
   role: "Software Developer",
   location: "USA",
@@ -14,11 +14,11 @@ export const site = {
   email: "contact@lambdabees.com",
   socials: {
     github: "https://github.com/doneshreddy",
-    linkedin: "https://www.linkedin.com/doneshreddy/",
+    //linkedin: "https://www.linkedin.com/doneshreddy/",
     email: "mailto:contact@lambdabees.com",
   },
-  githubUser: "doneshreddy",
-  linkedinUser: "doneshreddy",
+  //githubUser: "doneshreddy",
+  //linkedinUser: "doneshreddy",
 };
 
 export const company = {
